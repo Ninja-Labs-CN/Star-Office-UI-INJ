@@ -1,5 +1,10 @@
 # Star Office UI
 
+**本项目已更新**:
+- Yesterday Notes 面板改为 "工作记录"
+- 办公室名称改为 "Vincent Co.Tech"
+- 自动化状态切换已实现
+
 🌐 Language: **中文** | [English](./README.en.md) | [日本語](./README.ja.md)
 
 ![Star Office UI 封面](docs/screenshots/readme-cover-2.jpg)
