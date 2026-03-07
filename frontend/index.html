@@ -920,7 +920,7 @@
         }
         #memo-content {
             color: #3b3b32;
-            font-size: 12px;
+            font-size: 1.2em;
             line-height: 1.8;
             white-space: pre-wrap;
             word-wrap: break-word;
@@ -929,6 +929,7 @@
             padding-right: 4px;
             position: relative;
             left: 100px; /* move content right by 100px */
+            max-height: 200px;
             top: -10px;
         }
         #memo-content::-webkit-scrollbar {
@@ -1317,7 +1318,7 @@
                 assetHintNotInScene: '当前场景未检测到此对象，仍可替换文件（刷新后生效）',
                 assetHintDefault: '通用素材：建议保持原图尺寸、透明通道与视觉重心一致，避免错位或失真',
                 showCoords: '显示坐标', hideCoords: '隐藏坐标', moveView: '移动视野', lockView: '锁定视野',
-                memoTitle: '昨 日 小 记', guestTitle: '访 客 列 表', officeTitle: '海辛小龙虾的办公室',
+                memoTitle: '工作记录', guestTitle: '访 客 列 表', officeTitle: 'Vincent Co.Tech',
                 loadingOffice: '正在加载 Star 的像素办公室...'
             },
             en: {
@@ -1373,7 +1374,7 @@
                 assetHintNotInScene: '現在のシーンでこのオブジェクトは未検出です。ファイル差し替えは可能（更新後に反映）',
                 assetHintDefault: '汎用素材：元サイズ・透過・視覚アンカーを維持し、ズレや崩れを防いでください',
                 showCoords: '座標表示', hideCoords: '座標非表示', moveView: '視点移動', lockView: '視点固定',
-                memoTitle: '昨日のメモ', guestTitle: '訪問者リスト', officeTitle: 'ハイシン・ロブスターのオフィス',
+                memoTitle: '工作记录', guestTitle: '訪問者リスト', officeTitle: 'Vincent Co.Tech',
                 loadingOffice: 'Star のピクセルオフィスを読み込み中...'
             }
         };
@@ -1549,22 +1550,32 @@
         async function loadMemo() {
             const memoDate = document.getElementById('memo-date');
             const memoContent = document.getElementById('memo-content');
-            
+
             try {
-                const response = await fetch('/yesterday-memo?t=' + Date.now(), { cache: 'no-store' });
-                const data = await response.json();
-                
-                if (data.success && data.memo) {
-                    memoDate.textContent = data.date || '';
-                    memoContent.innerHTML = data.memo.replace(/\n/g, '<br>');
+                // Read real-time work log from log.txt (overwrite old content)
+                const response = await fetch('/static/log.txt?t=' + Date.now(), { cache: 'no-store' });
+                if (response.ok) {
+                    const text = await response.text();
+                    if (memoDate) memoDate.textContent = new Date().toLocaleDateString();
+                    memoContent.textContent = text || 'No log yet';
                 } else {
-                    memoContent.innerHTML = '<div id="memo-placeholder">暂无昨日日记</div>';
+                    // Fallback to yesterday-memo API
+                    const fallback = await fetch('/yesterday-memo?t=' + Date.now(), { cache: 'no-store' });
+                    const data = await fallback.json();
+                    if (data.success && data.memo) {
+                        if (memoDate) memoDate.textContent = data.date || '';
+                        memoContent.innerHTML = data.memo.replace(/\n/g, '<br>');
+                    } else {
+                        memoContent.innerHTML = '<div id="memo-placeholder">No work log</div>';
+                    }
                 }
             } catch (e) {
-                console.error('加载 memo 失败:', e);
-                memoContent.innerHTML = '<div id="memo-placeholder">加载失败</div>';
+                console.error('Failed to load memo:', e);
+                memoContent.innerHTML = '<div id="memo-placeholder">Load failed</div>';
             }
         }
+        // Auto-refresh work log every 5 seconds
+        setInterval(loadMemo, 5000);
 
         // 更新加载进度
         function updateLoadingProgress() {
@@ -4079,7 +4090,7 @@ function toggleBrokerPanel() {
             sofa.anims.stop();
             sofa.setTexture('sofa_idle');
 
-            // 加像素风小牌匾：海辛小龙虾的办公室
+            // 加像素风小牌匾：Vincent Co.Tech
             const plaqueX = config.width / 2;
             const plaqueY = config.height - 36;
             const plaqueBg = game.add.rectangle(plaqueX, plaqueY, 420, 44, 0x5d4037);

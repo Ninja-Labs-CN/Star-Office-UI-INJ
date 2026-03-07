@@ -67,4 +67,13 @@ if __name__ == "__main__":
     state["updated_at"] = datetime.now().isoformat()
     
     save_state(state)
+
+    # Also write to frontend/log.txt for real-time UI display
+    log_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "frontend", "log.txt")
+    try:
+        with open(log_path, "w", encoding="utf-8") as lf:
+            lf.write(f"[{state_name}] {detail}\n")
+    except Exception:
+        pass
+
     print(f"状态已更新: {state_name} - {detail}")
