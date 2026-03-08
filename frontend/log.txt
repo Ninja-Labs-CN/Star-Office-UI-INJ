@@ -1,1 +1,1 @@
-[executing] 开发钱包连接功能
+[executing] 重构钱包连接：viem + MetaMask + Injective EVM

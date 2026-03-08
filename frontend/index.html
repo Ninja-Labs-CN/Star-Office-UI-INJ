@@ -1313,6 +1313,7 @@
             <div id="wallet-actions">
                 <button id="btn-wallet-connect" class="primary" onclick="walletConnect()">连接钱包</button>
                 <button id="btn-wallet-refresh" onclick="walletRefreshBalance()">刷新余额</button>
+                <button id="btn-wallet-network-toggle" onclick="walletToggleNetwork()" style="display:none;">🔄 切换网络</button>
                 <button id="btn-wallet-disconnect" class="disconnect" onclick="walletDisconnect()" style="display:none;">断开</button>
             </div>
         </div>
@@ -1435,7 +1436,7 @@
     </div>
 
     <script src="/static/vendor/phaser-3.80.1.min.js?v={{VERSION_TIMESTAMP}}"></script>
-    <script src="/static/wallet.js?v={{VERSION_TIMESTAMP}}"></script>
+    <script src="/static/viem-wallet.js?v={{VERSION_TIMESTAMP}}"></script>
     <script>
         // 简易中英文切换
         let uiLang = localStorage.getItem('uiLang') || 'en';

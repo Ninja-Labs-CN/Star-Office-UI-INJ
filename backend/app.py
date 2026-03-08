@@ -23,6 +23,8 @@ from wallet_utils import (
     create_wallet,
     send_transaction,
 )
+from viem_wallet import wallet_manager
+from evm_config import get_all_networks, get_network
 from store_utils import (
     load_agents_state as _store_load_agents_state,
     save_agents_state as _store_save_agents_state,
@@ -2053,7 +2055,114 @@ def assets_upload():
 
 
 # ============================================================================
-# Wallet & Injective Integration Routes
+# EVM & Viem Wallet Routes (MetaMask-compatible)
+# ============================================================================
+
+@app.route("/evm/networks", methods=["GET"])
+def evm_networks():
+    """Get all available Injective EVM networks."""
+    try:
+        networks = wallet_manager.get_networks()
+        return jsonify({"ok": True, "networks": networks})
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
+
+@app.route("/evm/network/<network>", methods=["GET"])
+def evm_network_info(network):
+    """Get specific network configuration."""
+    try:
+        info = wallet_manager.get_network_info(network)
+        return jsonify(info)
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
+
+@app.route("/evm/balance", methods=["GET"])
+def evm_balance():
+    """Query balance for an EVM address.
+    
+    Query params:
+    - address: EVM address (required, starts with 0x)
+    - network: 'mainnet' or 'testnet' (default: mainnet)
+    """
+    try:
+        address = (request.args.get("address") or "").strip()
+        network = (request.args.get("network") or "mainnet").strip()
+
+        if not address:
+            return jsonify({"ok": False, "error": "Address required"}), 400
+
+        result = wallet_manager.get_balance(address, network)
+        if not result.get("ok"):
+            return jsonify(result), 400
+
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
+
+@app.route("/evm/gas-price", methods=["GET"])
+def evm_gas_price():
+    """Get current gas price.
+    
+    Query params:
+    - network: 'mainnet' or 'testnet' (default: mainnet)
+    """
+    try:
+        network = (request.args.get("network") or "mainnet").strip()
+        result = wallet_manager.get_gas_price(network)
+        if not result.get("ok"):
+            return jsonify(result), 400
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
+
+@app.route("/evm/block-number", methods=["GET"])
+def evm_block_number():
+    """Get current block number.
+    
+    Query params:
+    - network: 'mainnet' or 'testnet' (default: mainnet)
+    """
+    try:
+        network = (request.args.get("network") or "mainnet").strip()
+        result = wallet_manager.get_block_number(network)
+        if not result.get("ok"):
+            return jsonify(result), 400
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
+
+@app.route("/evm/estimate-gas", methods=["POST"])
+def evm_estimate_gas():
+    """Estimate gas for a transaction.
+    
+    POST data:
+    - tx: transaction object (from, to, value, data)
+    - network: 'mainnet' or 'testnet' (default: mainnet)
+    """
+    try:
+        data = request.get_json(silent=True) or {}
+        tx = data.get("tx", {})
+        network = (data.get("network") or "mainnet").strip()
+
+        if not tx:
+            return jsonify({"ok": False, "error": "tx object required"}), 400
+
+        result = wallet_manager.estimate_gas(tx, network)
+        if not result.get("ok"):
+            return jsonify(result), 400
+
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
+
+# ============================================================================
+# Wallet & Injective Integration Routes (Legacy - Cosmos)
 # ============================================================================
 
 @app.route("/wallet/health", methods=["GET"])
