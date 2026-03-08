@@ -50,12 +50,15 @@ const ViemWallet = (() => {
     statusText: () => document.getElementById('wallet-status-text'),
     addressDisplay: () => document.getElementById('wallet-address-display'),
     balanceAmount: () => document.getElementById('wallet-balance-amount'),
+    balanceDenom: () => document.getElementById('wallet-balance-denom'),
     networkBadge: () => document.getElementById('wallet-network-badge'),
     errorMsg: () => document.getElementById('wallet-error'),
     btnConnect: () => document.getElementById('btn-wallet-connect'),
     btnRefresh: () => document.getElementById('btn-wallet-refresh'),
     btnDisconnect: () => document.getElementById('btn-wallet-disconnect'),
     btnNetworkToggle: () => document.getElementById('btn-wallet-network-toggle'),
+    actionsSecondary: () => document.getElementById('wallet-actions-secondary'),
+    disconnectedHint: () => document.getElementById('wallet-disconnected-hint'),
   };
 
   // ─────────────────────────────────────────────────────────────
@@ -270,30 +273,43 @@ const ViemWallet = (() => {
     const text = DOM.statusText();
     const addr = DOM.addressDisplay();
     const badge = DOM.networkBadge();
+    const denom = DOM.balanceDenom();
     const btnConnect = DOM.btnConnect();
     const btnDisconnect = DOM.btnDisconnect();
-    const btnNetworkToggle = DOM.btnNetworkToggle();
+    const secondary = DOM.actionsSecondary();
+    const hint = DOM.disconnectedHint();
 
     if (state.connected && state.account) {
-      // Connected state
+      // ── Connected ──
       if (dot) dot.className = 'dot connected';
       if (text) text.textContent = '✓ Connected';
-      if (addr) addr.textContent = truncateAddress(state.account);
+      if (addr) {
+        addr.textContent = truncateAddress(state.account);
+        addr.title = state.account; // show full address on hover
+      }
       if (badge) {
+        badge.style.display = 'inline-block';
         badge.textContent = state.network === 'testnet' ? 'TESTNET' : 'MAINNET';
         badge.className = state.network === 'testnet' ? 'testnet' : '';
       }
+      if (denom) denom.style.display = 'inline';
       if (btnConnect) btnConnect.style.display = 'none';
-      if (btnDisconnect) btnDisconnect.style.display = 'inline-block';
-      if (btnNetworkToggle) btnNetworkToggle.style.display = 'inline-block';
+      if (btnDisconnect) btnDisconnect.style.display = 'block';
+      if (secondary) secondary.style.display = 'flex';
+      if (hint) hint.style.display = 'none';
     } else {
-      // Disconnected state
+      // ── Disconnected ──
       if (dot) dot.className = 'dot';
       if (text) text.textContent = 'Not connected';
-      if (addr) addr.textContent = 'Not connected';
-      if (btnConnect) btnConnect.style.display = 'inline-block';
+      if (addr) { addr.textContent = '—'; addr.title = ''; }
+      if (badge) badge.style.display = 'none';
+      if (denom) denom.style.display = 'none';
+      const amnt = DOM.balanceAmount();
+      if (amnt) amnt.textContent = '—';
+      if (btnConnect) btnConnect.style.display = 'block';
       if (btnDisconnect) btnDisconnect.style.display = 'none';
-      if (btnNetworkToggle) btnNetworkToggle.style.display = 'none';
+      if (secondary) secondary.style.display = 'none';
+      if (hint) hint.style.display = 'block';
     }
   }
 
@@ -326,49 +342,64 @@ const ViemWallet = (() => {
 
   async function connect() {
     const btnConnect = DOM.btnConnect();
-    if (btnConnect) btnConnect.disabled = true;
+    if (btnConnect) { btnConnect.disabled = true; btnConnect.textContent = '⏳ Connecting...'; }
 
     try {
-      showError('Connecting...');
+      clearError();
+      showError('Opening MetaMask...');
+
+      if (!window.ethereum) {
+        showError('MetaMask not installed. Please install the MetaMask browser extension.');
+        return;
+      }
 
       if (!await initProvider()) {
         state.connected = false;
         updateUI();
-        if (btnConnect) btnConnect.disabled = false;
         return;
       }
 
-      // Request accounts
+      // 1. Request account access
       const accounts = await state.provider.request({
         method: 'eth_requestAccounts',
       });
 
-      if (accounts && accounts.length > 0) {
-        state.account = accounts[0];
-        state.connected = true;
-
-        // Get current chain ID
-        const chainIdHex = await state.provider.request({
-          method: 'eth_chainId',
-        });
-        state.chainId = parseInt(chainIdHex, 16);
-        await updateNetworkFromChainId();
-
-        updateUI();
-        await refreshBalance();
-        startAutoRefresh();
-        clearError();
-      } else {
+      if (!accounts || accounts.length === 0) {
+        showError('No accounts found — unlock MetaMask and try again.');
         state.connected = false;
-        showError('No accounts available');
         updateUI();
+        return;
       }
+
+      state.account = accounts[0];
+      state.connected = true;
+      updateUI(); // show connected state immediately
+
+      // 2. Switch to Injective EVM mainnet (auto-add if not in MetaMask)
+      showError('Switching to Injective EVM network...');
+      const switched = await switchNetwork('mainnet');
+      if (!switched) {
+        // still connected, just on wrong network — user can manually switch
+        showError('Connected, but not on Injective EVM. Use Switch Network to change.');
+      } else {
+        clearError();
+      }
+
+      // 3. Load balance
+      await refreshBalance();
+      startAutoRefresh();
+
     } catch (error) {
+      if (error.code === 4001) {
+        // User rejected
+        showError('Connection cancelled by user.');
+      } else {
+        showError(`Connection failed: ${error.message}`);
+      }
       state.connected = false;
-      showError(`Connection failed: ${error.message}`);
       updateUI();
     } finally {
-      if (btnConnect) btnConnect.disabled = false;
+      if (btnConnect) { btnConnect.disabled = false; btnConnect.textContent = '🦊 Connect MetaMask'; }
     }
   }
 
@@ -407,13 +438,14 @@ const ViemWallet = (() => {
     state.connected = false;
     state.account = null;
     state.balance = '0';
-    
-    const amnt = DOM.balanceAmount();
-    if (amnt) amnt.textContent = '0';
+    state.chainId = null;
 
     updateUI();
     stopAutoRefresh();
     clearError();
+    // Brief confirmation message
+    showError('Disconnected.');
+    setTimeout(() => clearError(), 2000);
   }
 
   async function init() {

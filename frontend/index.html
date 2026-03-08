@@ -1055,21 +1055,35 @@
             background: #1e40af;
             border-color: #3b82f6;
             color: #fff;
+            width: 100%;
+            padding: 9px 12px;
+            font-size: 14px;
+            letter-spacing: 1px;
         }
         #wallet-panel button.primary:hover {
             background: #2563eb;
+            border-color: #60a5fa;
         }
         #wallet-panel button.disconnect {
-            background: #5a1818;
+            background: #1f2937;
             border-color: #e94560;
             color: #fca5a5;
-            font-size: 11px;
-            padding: 3px 8px;
+            width: 100%;
+            padding: 7px 12px;
+            font-size: 13px;
+            letter-spacing: 1px;
         }
         #wallet-panel button.disconnect:hover {
-            background: #7f1d1d;
+            background: #5a1818;
+            border-color: #f87171;
+            color: #fff;
         }
         #wallet-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        #wallet-actions-secondary {
             display: flex;
             gap: 6px;
             flex-wrap: wrap;
@@ -1078,6 +1092,12 @@
             color: #f87171;
             font-size: 11px;
             min-height: 14px;
+        }
+        #wallet-disconnected-hint {
+            font-size: 10px;
+            color: #6b7280;
+            text-align: center;
+            line-height: 1.4;
         }
 
         /* 手机端专属适配（不影响桌面） */
@@ -1296,7 +1316,7 @@
             </div>
         </div>
 
-        <!-- 钱包面板 -->
+        <!-- Wallet Panel -->
         <div id="wallet-panel">
             <div id="wallet-panel-title">💰 Injective Wallet</div>
             <div id="wallet-error"></div>
@@ -1306,15 +1326,23 @@
             </div>
             <div id="wallet-address-display">Not connected</div>
             <div id="wallet-balance-display">
-                <span class="amount" id="wallet-balance-amount">0</span>
-                <span class="denom">INJ</span>
-                <span id="wallet-network-badge" class="mainnet">mainnet</span>
+                <span class="amount" id="wallet-balance-amount">—</span>
+                <span class="denom" id="wallet-balance-denom" style="display:none;">INJ</span>
+                <span id="wallet-network-badge" style="display:none;">MAINNET</span>
             </div>
             <div id="wallet-actions">
-                <button id="btn-wallet-connect" class="primary" onclick="walletConnect()">Connect Wallet</button>
-                <button id="btn-wallet-refresh" onclick="walletRefreshBalance()">Refresh Balance</button>
-                <button id="btn-wallet-network-toggle" onclick="walletToggleNetwork()" style="display:none;">🔄 Switch Network</button>
-                <button id="btn-wallet-disconnect" class="disconnect" onclick="walletDisconnect()" style="display:none;">Disconnect</button>
+                <!-- Connect button (shown when disconnected) -->
+                <button id="btn-wallet-connect" class="primary" onclick="walletConnect()">🦊 Connect MetaMask</button>
+                <!-- Disconnect button (shown when connected) -->
+                <button id="btn-wallet-disconnect" class="disconnect" onclick="walletDisconnect()" style="display:none;">⏏ Disconnect Wallet</button>
+                <!-- Secondary actions (shown when connected) -->
+                <div id="wallet-actions-secondary" style="display:none;">
+                    <button id="btn-wallet-refresh" onclick="walletRefreshBalance()">↻ Refresh</button>
+                    <button id="btn-wallet-network-toggle" onclick="walletToggleNetwork()">🔄 Switch Network</button>
+                </div>
+            </div>
+            <div id="wallet-disconnected-hint">
+                Requires MetaMask · Injective EVM Mainnet (Chain ID 1776)
             </div>
         </div>
 

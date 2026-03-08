@@ -1,1 +1,1 @@
-[executing] Fixing SyntaxError - running tests first
+[executing] Adding wallet connect/disconnect toggle
