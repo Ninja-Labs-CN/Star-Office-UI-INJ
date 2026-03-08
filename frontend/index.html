@@ -1721,13 +1721,13 @@
 
         const BUBBLE_TEXTS = {
             en: {
-                idle: ['On standby: ears up.','I'm here, ready to roll.','Let's tidy the desk first.','Taking a quick brain breeze.','Efficient and elegant, as always.','Waiting for a more precise strike.','Coffee is warm, ideas too.','Giving you a quiet backstage buff.','Status: calm / charging.','Cat says: no rush, we're good.'],
-                writing: ['Focus mode on: do not disturb.','Let's clear the critical path first.','I'll make the complex simple.','Putting bugs in a cage.','Save first, then continue.','Every step should be rollback-safe.','Today's progress is tomorrow's confidence.','Converge first, then diverge.','Making the system more explainable.','Steady-this is winnable.'],
+                idle: ['On standby: ears up.','Here and ready to roll.','Tidying the desk first.','Taking a quick brain breeze.','Efficient and elegant, as always.','Waiting for a more precise strike.','Coffee is warm, ideas too.','Giving you a quiet backstage buff.','Status: calm / charging.','Cat says: no rush, all good.'],
+                writing: ['Focus mode on: do not disturb.','Clear the critical path first.','Making complexity simple.','Putting bugs in a cage.','Save first, then continue.','Every step should be rollback-safe.','Progress today, confidence tomorrow.','Converge first, then diverge.','Making the system more explainable.','Steady - we can win this.'],
                 researching: ['Digging the evidence chain.','Let me boil info into conclusions.','Found it: key clue here.','Control variables first.','Checking why this happens.','Turn intuition into verification.','Locate first, optimize next.','No rush-draw the causality map first.'],
-                executing: ['Executing-don't blink.','Split tasks, conquer one by one.','Pipeline is running.','One-click push: go go.','Let the results speak.','Build MVP first, then craft beauty.'],
-                syncing: ['Syncing: lock today into the cloud.','Backup is safety, not ceremony.','Writing… don't cut power.','Handing changes to timestamps.','Cloud alignment: click.','Don't shake it before sync finishes.','Saving future-us from disasters.','One more backup, one less regret.'],
-                error: ['Alarm on-stay calm.','I can smell a bug.','Reproduce first, then fix.','Give me logs; I'll translate.','Errors are clues, not enemies.','Circle the impact area first.','Stop the bleeding, then surgery.','On it: tracing root cause now.','Don't worry, seen this many times.','Alert mode: make the issue reveal itself.'],
-                cat: ['Meow~','Purr purr…','Tail wiggle activated.','Sunbathing is the best.','Someone came to see me!','I'm the office mascot.','Big stretch~','Is today's snack ready yet?','Rrrrr purr…','Best view spot secured.']
+                executing: ['Executing - eyes open.','Split tasks, conquer one by one.','Pipeline is running.','One-click push: go go.','Let the results speak.','Build MVP first, then craft beauty.'],
+                syncing: ['Syncing: lock today into the cloud.','Backup is safety, not ceremony.','Writing - keep the power on.','Handing changes to timestamps.','Cloud alignment: click.','Hold still until sync finishes.','Saving future-us from disasters.','One more backup, one less regret.'],
+                error: ['Alarm on - stay calm.','I can smell a bug.','Reproduce first, then fix.','Give me logs, I will translate.','Errors are clues, not enemies.','Circle the impact area first.','Stop the bleeding, then surgery.','On it: tracing root cause now.','Seen this before - no panic.','Alert mode: make the issue reveal itself.'],
+                cat: ['Meow~','Purr purr...','Tail wiggle activated.','Sunbathing is the best.','Someone came to visit!','Office mascot, at your service.','Big stretch~','Snack time yet?','Rrrrr purr...','Best view spot secured.']
             }
         };
 
@@ -2724,7 +2724,7 @@ function toggleBrokerPanel() {
             placeOverlayAndStatusAtCanvasBottomLeft();
             const loadingTexts = {
                 en: [
-                    'Packing today's luggage of inspiration…',
+                    'Packing the luggage of inspiration…',
                     'Drawing the digital coordinates for the next stop…',
                     'Checking the destination of this drift…',
                     'Folding the office into portable mode…',
@@ -3337,7 +3337,7 @@ function toggleBrokerPanel() {
             if (!DEMO_MODE) return;
             if (!Array.isArray(window.__demoVisitors) || window.__demoVisitors.length === 0) {
                 window.__demoVisitors = [
-                    { agentId: 'demo_nika', name: 'Nika', authStatus: 'approved', state: 'writing', bubbleText: 'I'm working', isDemo: true, updated_at: new Date().toISOString() },
+                    { agentId: 'demo_nika', name: 'Nika', authStatus: 'approved', state: 'writing', bubbleText: 'Working hard', isDemo: true, updated_at: new Date().toISOString() },
                     { agentId: 'demo_mercury', name: 'Mercury', authStatus: 'approved', state: 'idle', bubbleText: 'Taking a break in the lounge', isDemo: true, updated_at: new Date().toISOString() }
                 ];
             }
@@ -4284,7 +4284,7 @@ function toggleBrokerPanel() {
                 }
                 game.input.setDefaultCursor(on ? 'grab' : 'default');
                 if (isTouchDevice && statusText) {
-                    const info = on ? 'Pan view enabled (drag canvas left/right)' : 'Pan view disabled (click top-left 'Pan View' to enable)';
+                    const info = on ? 'Pan view enabled (drag canvas left/right)' : 'Pan view disabled (click top-left Pan View button to enable)';
                     statusText.textContent = `Status: [${(STATES[currentState] && STATES[currentState].name) || 'Idle'}] ${info}`;
                 }
             }
