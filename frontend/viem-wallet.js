@@ -11,21 +11,25 @@
 
 const ViemWallet = (() => {
   // Injective EVM Network Configuration
+  // Reference: https://docs.injective.network/developers-evm/network-information
   const NETWORKS = {
     mainnet: {
       id: 'injective-mainnet-evm',
-      chainId: 60,  // Injective EVM mainnet
+      chainId: 1776,  // Injective EVM Mainnet (Cosmos: injective-1)
       name: 'Injective',
-      rpcUrl: 'https://evm.injective.network',
-      blockExplorerUrl: 'https://explorer.injective.network',
+      rpcUrl: 'https://sentry.evm-rpc.injective.network/',
+      wsUrl: 'wss://sentry.evm-ws.injective.network',
+      blockExplorerUrl: 'https://blockscout.injective.network/',
       currency: { name: 'Injective', symbol: 'INJ', decimals: 18 }
     },
     testnet: {
       id: 'injective-testnet-evm',
-      chainId: 888,  // Injective EVM testnet
+      chainId: 1439,  // Injective EVM Testnet (Cosmos: injective-888)
       name: 'Injective Testnet',
-      rpcUrl: 'https://evm.testnet.injective.network',
-      blockExplorerUrl: 'https://testnet.explorer.injective.network',
+      rpcUrl: 'https://k8s.testnet.json-rpc.injective.network/',
+      wsUrl: 'wss://k8s.testnet.ws.injective.network/',
+      blockExplorerUrl: 'https://testnet.blockscout.injective.network/',
+      faucetUrl: 'https://testnet.faucet.injective.network/',
       currency: { name: 'Injective Testnet', symbol: 'INJ', decimals: 18 }
     }
   };

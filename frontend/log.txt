@@ -1,1 +1,1 @@
-[executing] 重构钱包连接：viem + MetaMask + Injective EVM
+[executing] 修正Injective EVM网络配置

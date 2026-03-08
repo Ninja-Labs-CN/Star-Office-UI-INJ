@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "injective-cli": {
+      "source": "InjectiveLabs/agent-skills",
+      "sourceType": "github",
+      "computedHash": "d83f7d6fa7a887b5a9f059d931aaf51cda417d09f5b20afb96e711ca799213ea"
+    }
+  }
+}

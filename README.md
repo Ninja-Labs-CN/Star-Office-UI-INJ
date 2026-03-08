@@ -55,10 +55,12 @@ Open your browser at `http://127.0.0.1:19000` to access the UI.
 
 ### Injective EVM Networks
 
-| Network | Chain ID | RPC URL | Explorer |
-|---------|----------|---------|----------|
-| **Mainnet** | 60 | `https://evm.injective.network` | [explorer.injective.network](https://explorer.injective.network) |
-| **Testnet** | 888 | `https://evm.testnet.injective.network` | [testnet.explorer.injective.network](https://testnet.explorer.injective.network) |
+Official documentation: https://docs.injective.network/developers-evm/network-information
+
+| Network | EVM Chain ID | Cosmos Chain ID | RPC URL | Explorer |
+|---------|------|---|---------|----------|
+| **Mainnet** | 1776 | injective-1 | `https://sentry.evm-rpc.injective.network/` | [blockscout.injective.network](https://blockscout.injective.network/) |
+| **Testnet** | 1439 | injective-888 | `https://k8s.testnet.json-rpc.injective.network/` | [testnet.blockscout.injective.network](https://testnet.blockscout.injective.network/) |
 
 ### Architecture
 
@@ -161,17 +163,18 @@ MetaMask will automatically prompt to add Injective EVM networks when you click 
 
 **Mainnet:**
 - Network Name: Injective
-- RPC URL: `https://evm.injective.network`
-- Chain ID: `60`
+- RPC URL: `https://sentry.evm-rpc.injective.network/`
+- Chain ID: `1776`
 - Currency Symbol: `INJ`
-- Explorer: `https://explorer.injective.network`
+- Explorer: `https://blockscout.injective.network/`
 
 **Testnet:**
 - Network Name: Injective Testnet
-- RPC URL: `https://evm.testnet.injective.network`
-- Chain ID: `888`
+- RPC URL: `https://k8s.testnet.json-rpc.injective.network/`
+- Chain ID: `1439`
 - Currency Symbol: `INJ`
-- Explorer: `https://testnet.explorer.injective.network`
+- Explorer: `https://testnet.blockscout.injective.network/`
+- Faucet: `https://testnet.faucet.injective.network/`
 
 ## License
 
