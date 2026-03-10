@@ -158,22 +158,14 @@ Remind the user:
 
 ---
 
-## 6. Yesterday's Notes (Optional)
-
-If the user wants to see "Yesterday's Notes":
-- Place a `memory/YYYY-MM-DD.md` file in the parent directory of the repository
-- The backend will automatically read yesterday's (or the most recent available) record and display it with basic redaction
-
----
-
-## 7. FAQ
+## 6. FAQ
 
 ### Q1: "Can I use this commercially?"
 > The code is available under the MIT license, but art assets (including characters and scenes) are not licensed for commercial use. If you want to use this commercially, you must replace all art assets with your own originals.
 
 ---
 
-## 8. Tips for the Agent
+## 7. Tips for the Agent
 
 - Complete all startup steps on behalf of the user — let them just "watch" and "experience"
 - For public access, prefer Cloudflare Tunnel (fastest and easiest)
@@ -184,7 +176,7 @@ If the user wants to see "Yesterday's Notes":
 
 ---
 
-## 9. 2026-03 Incremental Updates (New Items Only)
+## 8. 2026-03 Incremental Updates (New Items Only)
 
 > Key updates in this refresh:
 > 1) Added CN/EN/JP tri-language support
@@ -192,7 +184,7 @@ If the user wants to see "Yesterday's Notes":
 > 3) Integrated image generation API (agent auto-decorates rooms + manual user decoration)
 > 4) Art asset replacement and optimization (including naming and index rebuild)
 
-### 9.1 Recommended Image Generation Models (Room Decoration)
+### 8.1 Recommended Image Generation Models (Room Decoration)
 
 When the user uses "Move House / Find Agent", recommend:
 
@@ -207,7 +199,7 @@ Recommended configuration:
 
 Remind the user: if the key is missing, they can enter it directly in the sidebar and save.
 
-### 9.2 Sidebar Passcode Security Reminder (Required)
+### 8.2 Sidebar Passcode Security Reminder (Required)
 
 The default passcode is `1234`, but production/public-facing deployments must use a strong password:
 
@@ -217,7 +209,7 @@ export ASSET_DRAWER_PASS="your-strong-pass"
 
 Reason: Prevents external visitors from modifying room layout, decorations, and asset configuration.
 
-### 9.3 Copyright Update
+### 8.3 Copyright Update
 
 The main character state sprites have been switched to a copyright-free cat design; the old character copyright notice no longer applies.
 
@@ -225,7 +217,7 @@ Unified copyright stance:
 - Code: MIT
 - Art assets: No commercial use
 
-### 9.4 Installation Reminder (API is Optional)
+### 8.4 Installation Reminder (API is Optional)
 
 When helping the user install, make it clear:
 
@@ -235,7 +227,7 @@ When helping the user install, make it clear:
 Suggested message:
 > Get the base dashboard running first; connect your own API later if you want unlimited background changes / AI image generation.
 
-### 9.5 Upgrade Guide (From Older Versions)
+### 8.5 Upgrade Guide (From Older Versions)
 
 If the user has an older version installed, follow these steps to upgrade:
 
@@ -254,7 +246,7 @@ If the user has an older version installed, follow these steps to upgrade:
    - Asset sidebar (select, replace, set defaults)
    - Image generation entry (available when key is set)
 
-### 9.6 Feature Update Checklist (Tell the User)
+### 8.6 Feature Update Checklist (Tell the User)
 
 After this update, remind the user of at least these changes:
 
@@ -263,7 +255,7 @@ After this update, remind the user of at least these changes:
 3. **Connect your own image generation API** to continuously swap backgrounds (recommended: `nanobanana-pro` / `nanobanana-2`).
 4. Enhanced security: `ASSET_DRAWER_PASS` should be set to a strong password in production.
 
-### 9.7 2026-03-05 Stability Fixes
+### 8.7 2026-03-05 Stability Fixes
 
 This update fixes several issues affecting production stability:
 
